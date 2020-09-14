@@ -10,6 +10,9 @@ RS      = %00100000
         .org    $8000
 
 reset:
+        ldx     #$ff            ; Initialize Stack Pointer
+        txs
+
         lda     #%11111111      ; PORTB outputs data to display
         sta     DDRB
 
@@ -17,151 +20,61 @@ reset:
         sta     DDRA
 
         lda     #%00111000      ; Set 8-bit mode, 2-line display; 5x8 font
-        sta     PORTB
-        lda     #0
-        sta     PORTA
-        lda     #E
-        sta     PORTA
-        lda     #0
-        sta     PORTA
-
+        jsr     lcd_instruction
         lda     #%00001110      ; Display & Cursor on, no blinking
-        sta     PORTB
-        lda     #0
-        sta     PORTA
-        lda     #E
-        sta     PORTA
-        lda     #0
-        sta     PORTA
-
+        jsr     lcd_instruction
         lda     #%00000110      ; Increment mode, don't shift
-        sta     PORTB
-        lda     #0
-        sta     PORTA
-        lda     #E
-        sta     PORTA
-        lda     #0
-        sta     PORTA
+        jsr     lcd_instruction
 
         lda     #"H"
-        sta     PORTB
-        lda     #RS
-        sta     PORTA
-        lda     #(RS | E)
-        sta     PORTA
-        lda     #RS
-        sta     PORTA
-
+        jsr     print_char
         lda     #"E"
-        sta     PORTB
-        lda     #RS
-        sta     PORTA
-        lda     #(RS | E)
-        sta     PORTA
-        lda     #RS
-        sta     PORTA
-
+        jsr     print_char
         lda     #"L"
-        sta     PORTB
-        lda     #RS
-        sta     PORTA
-        lda     #(RS | E)
-        sta     PORTA
-        lda     #RS
-        sta     PORTA
-
+        jsr     print_char
         lda     #"L"
-        sta     PORTB
-        lda     #RS
-        sta     PORTA
-        lda     #(RS | E)
-        sta     PORTA
-        lda     #RS
-        sta     PORTA
-
+        jsr     print_char
         lda     #" "
-        sta     PORTB
-        lda     #RS
-        sta     PORTA
-        lda     #(RS | E)
-        sta     PORTA
-        lda     #RS
-        sta     PORTA
-
+        jsr     print_char
         lda     #"W"
-        sta     PORTB
-        lda     #RS
-        sta     PORTA
-        lda     #(RS | E)
-        sta     PORTA
-        lda     #RS
-        sta     PORTA
-
+        jsr     print_char
         lda     #"O"
-        sta     PORTB
-        lda     #RS
-        sta     PORTA
-        lda     #(RS | E)
-        sta     PORTA
-        lda     #RS
-        sta     PORTA
-
+        jsr     print_char
         lda     #"R"
-        sta     PORTB
-        lda     #RS
-        sta     PORTA
-        lda     #(RS | E)
-        sta     PORTA
-        lda     #RS
-        sta     PORTA
-
+        jsr     print_char
         lda     #"L"
-        sta     PORTB
-        lda     #RS
-        sta     PORTA
-        lda     #(RS | E)
-        sta     PORTA
-        lda     #RS
-        sta     PORTA
-
+        jsr     print_char
         lda     #"D"
-        sta     PORTB
-        lda     #RS
-        sta     PORTA
-        lda     #(RS | E)
-        sta     PORTA
-        lda     #RS
-        sta     PORTA
-
+        jsr     print_char
         lda     #"!"
-        sta     PORTB
-        lda     #RS
-        sta     PORTA
-        lda     #(RS | E)
-        sta     PORTA
-        lda     #RS
-        sta     PORTA
-
+        jsr     print_char
         lda     #"!"
-        sta     PORTB
-        lda     #RS
-        sta     PORTA
-        lda     #(RS | E)
-        sta     PORTA
-        lda     #RS
-        sta     PORTA
-
+        jsr     print_char
         lda     #"!"
-        sta     PORTB
-        lda     #RS
-        sta     PORTA
-        lda     #(RS | E)
-        sta     PORTA
-        lda     #RS
-        sta     PORTA
+        jsr     print_char
 
 loop:
         jmp     loop
+
+lcd_instruction:
+        sta     PORTB
+        lda     #0
+        sta     PORTA
+        lda     #E
+        sta     PORTA
+        lda     #0
+        sta     PORTA
+        rts
+
+print_char:
+        sta     PORTB
+        lda     #RS
+        sta     PORTA
+        lda     #(RS | E)
+        sta     PORTA
+        lda     #RS
+        sta     PORTA
+        rts
 
         .org    $fffc
         .word   reset
